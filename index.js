@@ -1,45 +1,21 @@
-const express = require("express")
-const bodyparser = require("body-parser")
-const {listrooms,listcustomers,bookingdetail} = require("./Utils") 
+import express from "express";
+import dotenv from "dotenv";
+import { Router } from "./src/routes/index.js";
 
-const rooms = [];
-const booking = [];
+//initiating server
+const app=express();
 
-const http_server = express();
+//middlewares
+app.use(express.json());
 
-http_server.use(bodyparser.json())
+//env configuration
+dotenv.config();
 
-http_server.post("/room", (req, res, next) => {
-    rooms.push(req.body)
-    res.send({message: "room created Successfully", rooms})
-})
+//initiating port
+const PORT=process.env.PORT||9000;
 
-http_server.post("/booking", (req, res, next) => {
-    booking.push(req.body)
-    res.send({name: "sabari nathan", message: "created"})
-})
+//routes
+app.use("/",Router);
 
-http_server.get("/rooms", (req, res, next) => {
-    res.send({message: "room created Successfully", rooms})
-})
-
-http_server.get("/bookings", (req, res, next) => {
-    res.send({message: "booking created Successfully", booking})
-})
-
-http_server.get("/", (req, res, next) => {
-    res.send({Details: "Booked Rooms",listrooms})
-})
-
-http_server.get("/listcustomers", (req, res, next) => {
-    res.send({Details: "Customer Details", listcustomers})
-})
-
-http_server.get("/bookingdetail", (req, res, next) => {
-    res.send({Details: "Booking Details", bookingdetail})
-})
-
-
-http_server.listen(3000, "0.0.0.0", () => {
-    console.log("listening to 127.0.0.1")
-})
+//listening to the server
+app.listen(PORT,()=>console.log("Server started in Port : "+PORT));
